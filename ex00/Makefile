@@ -4,8 +4,7 @@ NAME = btc
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
-CFILES = main.cpp\
-		 BitcoinExchange.cpp
+CFILES = main.cpp
 
 ODIR = build
 
