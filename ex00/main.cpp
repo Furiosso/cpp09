@@ -28,12 +28,6 @@ static void	insert_line(std::map<std::string, double>& infoMap, std::string& lin
 	}
 }
 
-static std::string	print_error(std::string& date)
-{
-	std::cerr << "Error: invalid date => " << date << std::endl;
-	return "";
-}
-
 static bool isstrnumeric(const std::string& str)
 {
 	size_t	len;
@@ -76,8 +70,6 @@ static std::string	manage_date(std::string& date)
 	syear = date.substr(0, hyphen[0]);
 	smonth = date.substr(hyphen[0] + 1, hyphen[1] - hyphen[0] -1);
 	sday = date.substr(hyphen[1] + 1, date.length());
-	//std::cout << "Year: " << syear << " | Month: " << smonth << " | Day: " << sday << std::endl;
-	//std::cout << "Year l: " << syear.length() << " | Month: " << smonth.length() << " | Day: " << sday.length() << std::endl;
 	if (syear.length() != 4 || smonth.length() > 2 || smonth.length() < 1 || sday.length() > 2 || sday.length() < 1
 		|| !isstrnumeric(syear) || !isstrnumeric(smonth) || !isstrnumeric(sday))
 		return print_error(date);
@@ -91,8 +83,43 @@ static std::string	manage_date(std::string& date)
 	}
 	if (!check_date_validity(atoi(syear.c_str()), atoi(smonth.c_str()), atoi(sday.c_str())))
 		return print_error(date);
-	//std::cout << sday << std::endl;
 	return date;
+}
+
+void	calculate_rate(const std::string& date, const double num, std::map<std::string, double>& infoMap)
+{
+	std::map<std::string, double>::iterator it;
+	
+	it = infoMap.lower_bound(date);
+	if (it == infoMap.end() || it->first != date)
+		it--;
+	std::cout << date << " => " << num << " = " << num * it->second << std::endl;
+}
+
+static void	manage_num(std::string& date, std::string& snum, std::map<std::string, double>& infoMap)
+{
+	size_t	i;
+	double	num;
+
+	if (snum.length() == 0 || (!std::isdigit(snum[0]) && snum[0] != '-' && snum[0] != '+'))
+		return print_error("invalid number");
+	i = 1;
+	while (i < snum.length() && std::isdigit(snum[i]))
+		++i;
+	if (i < snum.length() && snum[i] == '.')
+		++i;
+	if (snum[i - 1] == '.' && i == snum.length())
+		return print_error("invalid number");
+	while (i < snum.length() && std::isdigit(snum[i]))
+		++i;
+	if (i < snum.length())
+		return print_error("invalid number");
+	num = std::strtod(snum.c_str(), NULL);
+	if (num < 0.0)
+		return print_error("not a positive number");
+	if (num > 1000.0)
+		return print_error("too large a number");
+	calculate_rate(date, num, infoMap);
 }
 
 static void	find_info(std::map<std::string, double>& infoMap, std::string& line)
@@ -102,6 +129,7 @@ static void	find_info(std::map<std::string, double>& infoMap, std::string& line)
 	std::string	num;
 	size_t		spaces;
 
+	line = trim_line(line);
 	if ((vbar = line.find('|')) == std::string::npos)
 	{
 		std::cerr << "Error: bad input => " << line << std::endl;
@@ -114,12 +142,10 @@ static void	find_info(std::map<std::string, double>& infoMap, std::string& line)
 	spaces = 0;
 	while (std::isspace(line[vbar + spaces + 1]))
 		++spaces;
-	num = line.substr(vbar + spaces, line.length() - date.length());
+	num = line.substr(vbar + spaces + 1, line.length() - date.length());
 	if ((date = manage_date(date)) == "")
 		return ;
-	std::map<std::string, double>::iterator it = infoMap.begin();
-	it++;
-
+	manage_num(date, num, infoMap);
 }
 
 int	main (int argc, char* argv[])
@@ -138,14 +164,19 @@ int	main (int argc, char* argv[])
 	{
 		std::cerr << "Error: File not found" << std::endl;
 		return 2;
-
 	}
 	std::getline(dataBase, line);
 	while (std::getline(dataBase, line))
 		insert_line(infoMap, line);
-	std::getline(infile, line);
 	while (std::getline(infile, line))
-		find_info(infoMap, line);
+	{
+		if (line.length() == 0 || isallspaces(line) || isheader(line))
+			;
+		else if (isemptyrecord(line))
+			std::cerr << "Error: empty record" << std::endl;
+		else
+			find_info(infoMap, line);
+	}
 	infile.close();
 	dataBase.close();
 }
