@@ -1,8 +1,13 @@
-#include "bsc.hpp"
+#include "btc.hpp"
 
 std::string	print_error(const std::string& date)
 {
-	std::cerr << "Error: invalid date => " << date << std::endl;
+	std::cerr << "Error: ";
+	if (date.length() == 0)
+		std::cerr << "empty date";
+	else
+		std::cerr << "invalid date";
+	std::cerr << std::endl;
 	return "";
 }
 
@@ -11,24 +16,16 @@ void	print_error(const char* str)
 	std::cerr << "Error: "<< str << std::endl;
 }
 
-bool	isemptyrecord(const std::string& line)
+bool	open_files(std::ifstream& infile, std::ifstream& dataBase, const char* filename)
 {
-	size_t	i;
-	size_t	len;
-
-	len = line.length();
-	if (len == 0)
-		return true;
-	i = 0;
-	while (i < len && std::isspace(line[i]))
-		i++;
-	if (line[i] == '|')
-		i++;
-	else
+	infile.open(filename);
+	if (!infile)
 		return false;
-	while (i < len && std::isspace(line[i]))
-		i++;
-	if (i == len)
-		return true;
-	return false;
+	dataBase.open("data.csv");
+	if (!dataBase)
+	{
+		infile.close();
+		return false;
+	}
+	return true;
 }

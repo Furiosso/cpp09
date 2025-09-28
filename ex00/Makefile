@@ -5,6 +5,7 @@ NAME = btc
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 CFILES = main.cpp\
+		 btc.cpp\
 		 errors.cpp\
 		 parsing.cpp
 
