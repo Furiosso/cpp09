@@ -35,6 +35,7 @@ int	print_error_message(int i)
 static unsigned int	execute_operation(const unsigned int x, const unsigned int y, const char operation)
 {
 	unsigned int	result;
+
 	if (operation == '+')
 		result = x + y;
 	if (operation == '-')
