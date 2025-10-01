@@ -5,7 +5,10 @@ NAME = PmergeMe
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 CFILES = main.cpp\
-		 PmergeMe.cpp
+		 parsing.cpp\
+		 PmergeMe.cpp\
+		 sortingDequeUtils.cpp\
+		 utils.cpp
 
 ODIR = build
 
