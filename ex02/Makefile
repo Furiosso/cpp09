@@ -2,12 +2,14 @@ CC = c++
 
 NAME = PmergeMe
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize="address,leak" -g3
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 CFILES = main.cpp\
-		 parsing.cpp\
+		 parsingVector.cpp\
+		 parsingList.cpp\
 		 PmergeMe.cpp\
-		 sortingDequeUtils.cpp\
+		 sortingVectorUtils.cpp\
+		 sortingListUtils.cpp\
 		 utils.cpp
 
 ODIR = build

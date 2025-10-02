@@ -1,8 +1,8 @@
 #include "PmergeMe.hpp"
 
-static bool	check_duplicity(std::vector<unsigned int>& v, const unsigned int num)
+static bool	check_duplicity(std::list<unsigned int>& l, const unsigned int num)
 {
-	for (std::vector<unsigned int>::iterator begin = v.begin(); begin < v.end(); ++begin)
+	for (std::list<unsigned int>::iterator begin = l.begin(); begin != l.end(); ++begin)
 	{
 		if (num == *begin)
 			return true;
@@ -10,7 +10,7 @@ static bool	check_duplicity(std::vector<unsigned int>& v, const unsigned int num
 	return false;
 }
 
-int	parse_list(const char** args, std::vector<unsigned int>& v, std::deque<unsigned int>& d, std::list<unsigned int>& l)
+int	parse_list_l(const char** args, std::list<unsigned int>& l)
 {
 	size_t			len;
 	long long		lnum;
@@ -25,10 +25,8 @@ int	parse_list(const char** args, std::vector<unsigned int>& v, std::deque<unsig
 		if (lnum > std::numeric_limits<unsigned int>::max())
 			return print_error("value too large", 6);
 		num = static_cast<int>(lnum);
-		if (check_duplicity(v, num))
+		if (check_duplicity(l, num))
 			return print_error("duplicated value", 7);
-		v.push_back(num);
-		d.push_back(num);
 		l.push_back(num);
 	}
 	return 0;
