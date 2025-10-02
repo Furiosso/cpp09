@@ -89,7 +89,7 @@ static void	createJacobsthall(std::deque<unsigned int>& jacobsthall, size_t len)
 		l = j;
 		if (j - 1 >= len)
 		{
-			std::cout << "len: " << len << std::endl;
+			//std::cout << "len: " << len << std::endl;
 			while (len > k - 1)
 			{
 				jacobsthall.push_back(len);
@@ -105,19 +105,24 @@ static void	createJacobsthall(std::deque<unsigned int>& jacobsthall, size_t len)
 		j = l + k * 2;
 		k = l;
 		i = jacobsthall.size() - 1;
-		std::cout << "i: " << i << std::endl;
+		//std::cout << "i: " << i << std::endl;
 	}
 }
 
 void	searchAndInsert(std::deque<unsigned int>& d, std::deque<std::pair<unsigned int, unsigned int> >& pairs)
 {
-	std::deque<unsigned int>	jacobsthall;
-	size_t						len;
+	std::deque<unsigned int>			jacobsthall;
+	size_t								len;
+	std::deque<unsigned int>::iterator	pos;
 
 	len = pairs.size();
 	createJacobsthall(jacobsthall, len - 1);
+	//for (size_t i = 0; i < jacobsthall.size(); ++i)
+	//	std::cout << jacobsthall[i] << " ";
+	//std::cout << std::endl;
 	for (size_t i = 0; i < jacobsthall.size(); ++i)
-		std::cout << jacobsthall[i] << " ";
-	std::cout << std::endl;
-	d.begin()++;
+	{
+		pos = std::lower_bound(d.begin(), d.end(), pairs[jacobsthall[i]].first);
+		d.insert(pos, pairs[jacobsthall[i]].first);
+	}
 }

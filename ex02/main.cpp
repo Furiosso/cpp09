@@ -19,6 +19,10 @@ int	main(const int argc, const char* argv[])
 	std::cout << std::endl;
 	//start[0] = clock();
 	sort_deque(d);
+	std::cout << "After:\t";
+	for (std::deque<unsigned int>::iterator begin = d.begin(); begin < d.end(); ++begin)
+		std::cout << *begin << " ";
+	std::cout << std::endl;
 	//finish[0] = clock();
 	//lapse[0] = static_cast<double>(finish[0] - start[0]) / CLOCKS_PER_SEC * 1e6;
 }
