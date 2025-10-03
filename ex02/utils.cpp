@@ -19,6 +19,7 @@ size_t	get_len(const char** args)
 int	check_validity(const std::string& num)
 {
 	size_t	i;
+	size_t	j;
 	size_t	len;
 	size_t	num_len;
 
@@ -31,7 +32,8 @@ int	check_validity(const std::string& num)
 	if (num[i] == '+')
 		++i;
 	num_len = 0;
-	for (i = i; i < len; ++i)
+	j = i;
+	for (i = j; i < len; ++i)
 	{
 		if (std::isspace(num[i]))
 			break ;
